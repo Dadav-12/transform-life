@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
     <!-- Background Clouds & Birds Animated Decor for Whole Interface -->
@@ -56,10 +56,10 @@
             </div>
 
             <div class="header-actions">
-                <!-- Streak Badge Indicator -->
+                <!-- Prominent Fire Streak Header Badge -->
                 <div class="streak-header-badge" title="Daily Reflection Streak">
                     <span class="fire-icon">🔥</span>
-                    <span id="streak-count" class="streak-num">0</span>
+                    <span id="streak-count" class="streak-num">1</span>
                     <span class="streak-text">Streak</span>
                 </div>
 
@@ -170,7 +170,7 @@
             <!-- Banner Streak Display -->
             <div class="banner-streak">
                 <span class="fire-anim">🔥</span>
-                <span id="banner-streak-count">0</span> Day Streak
+                <span id="banner-streak-count">1</span> Day Streak
             </div>
         </div>
 
@@ -238,16 +238,16 @@
 
         <!-- COMPLETED TODAY CARD (Visible if submitted today) -->
         <div id="completed-card" class="card completed-card hidden">
+            <!-- Big Celebration Streak Banner -->
+            <div class="streak-celebration-banner">
+                <span class="big-fire">🔥</span>
+                <span id="streak-card-count" class="streak-highlight">1</span> Day Reflection Streak!
+            </div>
+
             <div class="completed-icon-wrapper">
                 <svg class="check-svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
-            </div>
-
-            <!-- Milestone Streak Banner -->
-            <div class="streak-celebration-banner">
-                <span class="big-fire">🔥</span>
-                <span id="streak-card-count" class="streak-highlight">1</span> Day Reflection Streak!
             </div>
 
             <h2>អ្នកបានបំពេញការរំលឹកសម្រាប់ថ្ងៃនេះរួចរាល់ហើយ!</h2>
@@ -308,6 +308,6 @@
         <span id="toast-text">Submission successful!</span>
     </div>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=3"></script>
 </body>
 </html>

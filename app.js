@@ -57,12 +57,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateStreakDisplay() {
         let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
         const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
+        const lastSubmittedDate = localStorage.getItem(STORAGE_KEY_LAST_DATE);
         const todayStr = getTodayString();
+
+        // If user already completed entry today but streak wasn't initialized, set streak to 1
+        if (lastSubmittedDate === todayStr && streak === 0) {
+            streak = 1;
+            localStorage.setItem(STORAGE_KEY_STREAK, '1');
+            localStorage.setItem(STORAGE_KEY_LAST_STREAK_DATE, todayStr);
+        }
 
         if (lastStreakDate && lastStreakDate !== todayStr) {
             const diffDays = getDaysDifference(lastStreakDate, todayStr);
             if (diffDays > 1) {
-                // Streak broken if missed more than 1 day
+                // Streak reset if missed more than 1 day
                 streak = 0;
                 localStorage.setItem(STORAGE_KEY_STREAK, '0');
             }
@@ -78,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
         let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
 
-        if (lastStreakDate === todayStr) {
+        if (lastStreakDate === todayStr && streak > 0) {
             // Already counted today
             updateStreakDisplay();
             return streak;
