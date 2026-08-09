@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="km" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ទ្រេនហ្វមជីវិត - Daily Bible Reflection</title>
+    <meta name="description" content="ទ្រេនហ្វមជីវិត - Daily Bible Verse & Reflection Form connected to Google Sheets.">
+    <!-- Google Fonts for Khmer & English -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Clouds & Birds Animated Decor for Whole Interface -->
+    <div class="sky-decor">
+        <!-- Floating Clouds (6 Layered Clouds Across Page) -->
+        <div class="cloud cloud-1">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+        <div class="cloud cloud-2">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+        <div class="cloud cloud-3">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+        <div class="cloud cloud-4">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+        <div class="cloud cloud-5">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+        <div class="cloud cloud-6">
+            <svg viewBox="0 0 100 60" fill="currentColor"><path d="M10 45 A15 15 0 0 1 35 30 A20 20 0 0 1 75 30 A15 15 0 0 1 90 45 Z"/></svg>
+        </div>
+
+        <!-- Small Flying Birds Silhouettes -->
+        <div class="birds-group">
+            <svg class="bird bird-1" viewBox="0 0 50 30"><path d="M 0,15 Q 12.5,0 25,15 Q 37.5,0 50,15 Q 37.5,7.5 25,20 Q 12.5,7.5 0,15 Z" fill="currentColor"/></svg>
+            <svg class="bird bird-2" viewBox="0 0 50 30"><path d="M 0,15 Q 12.5,0 25,15 Q 37.5,0 50,15 Q 37.5,7.5 25,20 Q 12.5,7.5 0,15 Z" fill="currentColor"/></svg>
+        </div>
+
+        <div class="blue-glow glow-1"></div>
+        <div class="blue-glow glow-2"></div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand-area">
+                <img src="logo.png" alt="ទ្រេនហ្វមជីវិត Logo" class="brand-logo">
+                <div class="brand-titles">
+                    <h1 class="khmer-title">ទ្រេនហ្វមជីវិត</h1>
+                    <p class="subtitle">Daily Bible Verse & Reflection</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <!-- Music Player Toggle Button -->
+                <button id="music-toggle" class="icon-btn music-btn" aria-label="Toggle Soft Background Music" title="Play Peaceful Worship Music">
+                    <!-- Equalizer bars animation when active -->
+                    <div class="eq-bars hidden" id="eq-bars">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <svg class="music-icon" id="music-icon-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Mode">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- DAILY BIBLE VERSE SLIDER / CAROUSEL -->
+        <div class="verse-carousel-card">
+            <!-- Image Area -->
+            <div class="carousel-img-wrapper">
+                <img src="slide1.png" alt="Daily Bread Landscape" class="carousel-img">
+                
+                <!-- Left / Right Slider Controls -->
+                <button class="slider-arrow prev-arrow" id="slider-prev" aria-label="Previous Verse" title="Previous (Move Right)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="slider-arrow next-arrow" id="slider-next" aria-label="Next Verse" title="Next (Move Left)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+
+                <!-- Slide Dots Indicators -->
+                <div class="carousel-dots" id="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                    <span class="dot" data-index="3"></span>
+                </div>
+            </div>
+
+            <!-- Carousel Content Slide Area -->
+            <div class="carousel-content-area" id="carousel-content">
+                <div class="carousel-slide-inner">
+                    <div class="verse-badge">
+                        <span class="cross-icon">✝️</span>
+                        <span id="slide-tag">ព្រះបន្ទូលប្រចាំថ្ងៃ • Daily Bread</span>
+                    </div>
+                    <h2 id="slide-title" class="slide-main-title">រៀន និងលូតលាស់ក្នុងព្រះបន្ទូលរៀងរាល់ថ្ងៃ</h2>
+                    <p id="slide-subtitle" class="slide-subtitle-text">Learn and transform your life daily through God's Word</p>
+                    <div id="slide-verse-box" class="slide-verse-quote">
+                        <p id="slide-passage">"ដ្បិតព្រះទ្រង់ស្រឡាញ់មនុស្សលោកដល់ម៉្លេះ បានជាទ្រង់ប្រទានព្រះរាជបុត្រាទ្រង់តែមួយ..."</p>
+                        <span id="slide-reference" class="slide-ref-name">យ៉ូហាន ៣:១៦ (John 3:16)</span>
+                    </div>
+                </div>
+
+                <div class="carousel-footer-action">
+                    <button id="use-verse-btn" class="use-verse-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>ជ្រើសរើសខនេះ (Use This Verse)</span>
+                    </button>
+                    <span class="swipe-hint">👈 Move left for more verses</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Date Header Banner -->
+        <div class="today-banner">
+            <div class="calendar-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
+            <div>
+                <span class="today-label">ការរំលឹកប្រចាំថ្ងៃ (TODAY'S ENTRY)</span>
+                <span id="current-date" class="date-str">--</span>
+            </div>
+        </div>
+
+        <!-- FORM CARD (Visible if not submitted today) -->
+        <div id="form-card" class="card main-card">
+            <div class="card-header">
+                <h2>សូមបំពេញការសិក្សាព្រះគម្ពីរប្រចាំថ្ងៃ</h2>
+                <p>Record your daily Bible verse and reflection to sync with Google Sheet.</p>
+            </div>
+
+            <form id="reflection-form">
+                <!-- Question 1: Full Name -->
+                <div class="form-group">
+                    <label for="fullName" class="form-label">
+                        1. What is your full name? (តើអ្នកឈ្មោះអ្វី?) <span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <input type="text" id="fullName" class="custom-input" placeholder="e.g. Sokha Chan" required>
+                    </div>
+                </div>
+
+                <!-- Question 2: Bible Verse -->
+                <div class="form-group">
+                    <label for="bibleVerse" class="form-label">
+                        2. What bible verse have you learned today? (តើព្រះគម្ពីរខណាដែលអ្នកបានរៀននៅថ្ងៃនេះ?) <span class="required">*</span>
+                    </label>
+                    <div class="input-container">
+                        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                        </svg>
+                        <input type="text" id="bibleVerse" class="custom-input" placeholder="e.g. John 3:16 / យ៉ូហាន ៣:១៦" required>
+                    </div>
+                </div>
+
+                <!-- Question 3: Reflection -->
+                <div class="form-group">
+                    <label for="reflection" class="form-label">
+                        3. Write down your reflection (សរសេរការរំលឹក និងការយល់ឃើញរបស់អ្នក) <span class="required">*</span>
+                    </label>
+                    <textarea id="reflection" class="custom-textarea" rows="5" placeholder="Share how this verse impacted your life today..." required></textarea>
+                </div>
+
+                <div class="one-per-day-note">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span><strong>1 Submission Per Day:</strong> You can complete this reflection once per day.</span>
+                </div>
+
+                <button type="submit" id="submit-btn" class="submit-button">
+                    <span>Submit Reflection</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- COMPLETED TODAY CARD (Visible if submitted today) -->
+        <div id="completed-card" class="card completed-card hidden">
+            <div class="completed-icon-wrapper">
+                <svg class="check-svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+
+            <h2>អ្នកបានបំពេញការរំលឹកសម្រាប់ថ្ងៃនេះរួចរាល់ហើយ!</h2>
+            <p class="completed-subtext">You have completed your daily reflection for today. Great job continuing your spiritual transformation!</p>
+
+            <div class="countdown-box">
+                <span class="countdown-label">NEXT REFLECTION UNLOCKS IN:</span>
+                <div id="countdown-timer" class="timer-digits">00:00:00</div>
+            </div>
+
+            <!-- Preview of today's submission -->
+            <div class="today-preview">
+                <h3>Today's Submitted Entry</h3>
+                <div class="preview-row">
+                    <span class="preview-label">Name:</span>
+                    <span id="preview-name" class="preview-val">--</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">Verse:</span>
+                    <span id="preview-verse" class="preview-val highlight-blue">--</span>
+                </div>
+                <div class="preview-row">
+                    <span class="preview-label">Reflection:</span>
+                    <span id="preview-reflection" class="preview-val">--</span>
+                </div>
+            </div>
+
+            <div class="completed-actions">
+                <button id="edit-today-btn" class="secondary-button">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Edit Today's Entry
+                </button>
+            </div>
+        </div>
+
+        <!-- PAST REFLECTIONS LIST -->
+        <div class="card history-card">
+            <div class="history-header">
+                <h3>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8v4l3 3"></path>
+                        <circle cx="12" cy="12" r="9"></circle>
+                    </svg>
+                    My Past Reflections
+                </h3>
+            </div>
+            <div id="history-list" class="history-list">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </main>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-text">Submission successful!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
