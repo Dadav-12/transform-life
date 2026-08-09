@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY_REFLECTIONS = 'transform_life_reflections';
     const STORAGE_KEY_LAST_DATE = 'transform_life_last_date';
     const STORAGE_KEY_THEME = 'transform_life_theme';
+    const STORAGE_KEY_STREAK = 'transform_life_streak';
+    const STORAGE_KEY_LAST_STREAK_DATE = 'transform_life_last_streak_date';
 
     // Hardcoded verified Google Apps Script Web App URL for direct public submissions to Google Sheet
     const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxlCrbYjdcEZsSBKlit0ySRGCk5NUOm0-9CAVT-ct3yir-efw68pKw85pkrjk7I0Ll8/exec';
@@ -34,9 +36,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const editTodayBtn = document.getElementById('edit-today-btn');
     const countdownTimerEl = document.getElementById('countdown-timer');
 
+    const streakCountHeader = document.getElementById('streak-count');
+    const bannerStreakCount = document.getElementById('banner-streak-count');
+    const streakCardCount = document.getElementById('streak-card-count');
+
     const historyList = document.getElementById('history-list');
     const toast = document.getElementById('toast');
     const toastText = document.getElementById('toast-text');
+
+    // ========================================================
+    // DAILY REFLECTION STREAK COUNTER LOGIC (1 Submission = 1 Streak)
+    // ========================================================
+    function getDaysDifference(d1Str, d2Str) {
+        const d1 = new Date(d1Str);
+        const d2 = new Date(d2Str);
+        const diffTime = Math.abs(d2 - d1);
+        return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    }
+
+    function updateStreakDisplay() {
+        let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
+        const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
+        const todayStr = getTodayString();
+
+        if (lastStreakDate && lastStreakDate !== todayStr) {
+            const diffDays = getDaysDifference(lastStreakDate, todayStr);
+            if (diffDays > 1) {
+                // Streak broken if missed more than 1 day
+                streak = 0;
+                localStorage.setItem(STORAGE_KEY_STREAK, '0');
+            }
+        }
+
+        if (streakCountHeader) streakCountHeader.textContent = streak;
+        if (bannerStreakCount) bannerStreakCount.textContent = streak;
+        if (streakCardCount) streakCardCount.textContent = streak;
+    }
+
+    function incrementStreak() {
+        const todayStr = getTodayString();
+        const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
+        let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
+
+        if (lastStreakDate === todayStr) {
+            // Already counted today
+            updateStreakDisplay();
+            return streak;
+        }
+
+        if (lastStreakDate) {
+            const diffDays = getDaysDifference(lastStreakDate, todayStr);
+            if (diffDays === 1) {
+                streak += 1;
+            } else {
+                streak = 1;
+            }
+        } else {
+            streak = 1;
+        }
+
+        localStorage.setItem(STORAGE_KEY_STREAK, streak.toString());
+        localStorage.setItem(STORAGE_KEY_LAST_STREAK_DATE, todayStr);
+        updateStreakDisplay();
+        return streak;
+    }
 
     // ========================================================
     // GUARANTEED LOCAL AUDIO PLAYER (Acoustic Guitar & Piano)
@@ -332,6 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const todayStr = getTodayString();
         const lastSubmittedDate = localStorage.getItem(STORAGE_KEY_LAST_DATE);
 
+        updateStreakDisplay();
+
         if (lastSubmittedDate === todayStr) {
             // User already completed today! Find today's entry
             const todayEntry = reflections.find(r => r.dateStr === todayStr);
@@ -353,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
             previewReflection.textContent = entry.reflection;
         }
 
+        updateStreakDisplay();
         startCountdownTimer();
     }
 
@@ -411,6 +477,9 @@ document.addEventListener('DOMContentLoaded', () => {
             reflection
         };
 
+        // Increment Daily Streak (1 submission = 1 streak count)
+        const currentStreak = incrementStreak();
+
         // Save locally
         reflections = reflections.filter(r => r.dateStr !== todayStr);
         reflections.unshift(payload);
@@ -426,10 +495,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 cache: 'no-cache',
                 body: payloadBlob
             });
-            showToast('បានផ្ញើទៅ Google Sheet រួចរាល់! (Submitted to Google Sheet)');
+            showToast(`🔥 ${currentStreak} Day Streak! (Submitted to Google Sheet)`);
         } catch (err) {
             console.error('Webhook error:', err);
-            showToast('Submission recorded!');
+            showToast(`🔥 ${currentStreak} Day Streak recorded!`);
         }
 
         submitBtn.disabled = false;
@@ -493,6 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize
     updateCarousel(0);
+    updateStreakDisplay();
     renderHistory();
     checkDailyStatus();
 });

@@ -56,6 +56,13 @@
             </div>
 
             <div class="header-actions">
+                <!-- Streak Badge Indicator -->
+                <div class="streak-header-badge" title="Daily Reflection Streak">
+                    <span class="fire-icon">🔥</span>
+                    <span id="streak-count" class="streak-num">0</span>
+                    <span class="streak-text">Streak</span>
+                </div>
+
                 <!-- Music Player Toggle Button -->
                 <button id="music-toggle" class="icon-btn music-btn" aria-label="Toggle Soft Background Music" title="Play Peaceful Worship Music">
                     <!-- Equalizer bars animation when active -->
@@ -156,9 +163,14 @@
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
             </div>
-            <div>
+            <div class="date-banner-content">
                 <span class="today-label">ការរំលឹកប្រចាំថ្ងៃ (TODAY'S ENTRY)</span>
                 <span id="current-date" class="date-str">--</span>
+            </div>
+            <!-- Banner Streak Display -->
+            <div class="banner-streak">
+                <span class="fire-anim">🔥</span>
+                <span id="banner-streak-count">0</span> Day Streak
             </div>
         </div>
 
@@ -211,7 +223,7 @@
                         <line x1="12" y1="8" x2="12" y2="12"></line>
                         <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
-                    <span><strong>1 Submission Per Day:</strong> You can complete this reflection once per day.</span>
+                    <span><strong>1 Submission Per Day:</strong> Completing today's entry adds +1 to your Daily Streak! 🔥</span>
                 </div>
 
                 <button type="submit" id="submit-btn" class="submit-button">
@@ -230,6 +242,12 @@
                 <svg class="check-svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
+            </div>
+
+            <!-- Milestone Streak Banner -->
+            <div class="streak-celebration-banner">
+                <span class="big-fire">🔥</span>
+                <span id="streak-card-count" class="streak-highlight">1</span> Day Reflection Streak!
             </div>
 
             <h2>អ្នកបានបំពេញការរំលឹកសម្រាប់ថ្ងៃនេះរួចរាល់ហើយ!</h2>
