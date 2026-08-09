@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const STORAGE_KEY_THEME = 'transform_life_theme';
 
     // Hardcoded verified Google Apps Script Web App URL for direct public submissions to Google Sheet
-    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwn1tGsys00gLzpZQveTyLvKlvRgEksGPSYyiVjmSfkhQu3g-FV_g2Tgi-8DGxHvfrs/exec';
+    const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxlCrbYjdcEZsSBKlit0ySRGCk5NUOm0-9CAVT-ct3yir-efw68pKw85pkrjk7I0Ll8/exec';
     let reflections = JSON.parse(localStorage.getItem(STORAGE_KEY_REFLECTIONS)) || [];
     
     // Set initial theme
