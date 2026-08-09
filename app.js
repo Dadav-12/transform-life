@@ -417,13 +417,14 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(STORAGE_KEY_REFLECTIONS, JSON.stringify(reflections));
         localStorage.setItem(STORAGE_KEY_LAST_DATE, todayStr);
 
-        // Submit to Google Sheets via hardcoded Webhook URL
+        // Submit to Google Sheets via Webhook URL
         try {
+            const payloadBlob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' });
             await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                cache: 'no-cache',
+                body: payloadBlob
             });
             showToast('បានផ្ញើទៅ Google Sheet រួចរាល់! (Submitted to Google Sheet)');
         } catch (err) {
