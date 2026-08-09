@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const toastText = document.getElementById('toast-text');
 
     // ========================================================
-    // DAILY REFLECTION STREAK COUNTER LOGIC (1 Submission = 1 Streak)
+    // RETROACTIVE STREAK CALCULATION FROM REFLECTION HISTORY
     // ========================================================
     function getDaysDifference(d1Str, d2Str) {
         const d1 = new Date(d1Str);
@@ -54,27 +54,49 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.floor(diffTime / (1000 * 60 * 60 * 24));
     }
 
-    function updateStreakDisplay() {
-        let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
-        const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
-        const lastSubmittedDate = localStorage.getItem(STORAGE_KEY_LAST_DATE);
-        const todayStr = getTodayString();
-
-        // If user already completed entry today but streak wasn't initialized, set streak to 1
-        if (lastSubmittedDate === todayStr && streak === 0) {
-            streak = 1;
-            localStorage.setItem(STORAGE_KEY_STREAK, '1');
-            localStorage.setItem(STORAGE_KEY_LAST_STREAK_DATE, todayStr);
+    function calculateStreakFromHistory() {
+        if (!reflections || reflections.length === 0) {
+            return 0;
         }
 
-        if (lastStreakDate && lastStreakDate !== todayStr) {
-            const diffDays = getDaysDifference(lastStreakDate, todayStr);
-            if (diffDays > 1) {
-                // Streak reset if missed more than 1 day
-                streak = 0;
-                localStorage.setItem(STORAGE_KEY_STREAK, '0');
+        // Get unique submission dates sorted newest first
+        const uniqueDates = Array.from(new Set(reflections.map(r => r.dateStr))).sort().reverse();
+        if (uniqueDates.length === 0) return 0;
+
+        const todayStr = getTodayString();
+        const newestDate = uniqueDates[0];
+        const daysFromNewest = getDaysDifference(newestDate, todayStr);
+
+        // If newest submission is older than 1 day ago, streak is 0
+        if (daysFromNewest > 1) {
+            return 0;
+        }
+
+        let streak = 1;
+        for (let i = 0; i < uniqueDates.length - 1; i++) {
+            const curr = uniqueDates[i];
+            const prev = uniqueDates[i + 1];
+            const diff = getDaysDifference(prev, curr);
+            if (diff === 1) {
+                streak++;
+            } else {
+                break;
             }
         }
+
+        return streak;
+    }
+
+    function updateStreakDisplay() {
+        // Calculate exact streak from past reflection history
+        let streak = calculateStreakFromHistory();
+        
+        // If history has at least 1 entry, streak should be at least 1
+        if (reflections.length > 0 && streak === 0) {
+            streak = reflections.length; // Fallback for stored reflections
+        }
+
+        localStorage.setItem(STORAGE_KEY_STREAK, streak.toString());
 
         if (streakCountHeader) streakCountHeader.textContent = streak;
         if (bannerStreakCount) bannerStreakCount.textContent = streak;
@@ -82,31 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function incrementStreak() {
-        const todayStr = getTodayString();
-        const lastStreakDate = localStorage.getItem(STORAGE_KEY_LAST_STREAK_DATE);
-        let streak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '0', 10);
-
-        if (lastStreakDate === todayStr && streak > 0) {
-            // Already counted today
-            updateStreakDisplay();
-            return streak;
-        }
-
-        if (lastStreakDate) {
-            const diffDays = getDaysDifference(lastStreakDate, todayStr);
-            if (diffDays === 1) {
-                streak += 1;
-            } else {
-                streak = 1;
-            }
-        } else {
-            streak = 1;
-        }
-
-        localStorage.setItem(STORAGE_KEY_STREAK, streak.toString());
-        localStorage.setItem(STORAGE_KEY_LAST_STREAK_DATE, todayStr);
         updateStreakDisplay();
-        return streak;
+        return parseInt(localStorage.getItem(STORAGE_KEY_STREAK) || '1', 10);
     }
 
     // ========================================================
@@ -485,14 +484,14 @@ document.addEventListener('DOMContentLoaded', () => {
             reflection
         };
 
-        // Increment Daily Streak (1 submission = 1 streak count)
-        const currentStreak = incrementStreak();
-
         // Save locally
         reflections = reflections.filter(r => r.dateStr !== todayStr);
         reflections.unshift(payload);
         localStorage.setItem(STORAGE_KEY_REFLECTIONS, JSON.stringify(reflections));
         localStorage.setItem(STORAGE_KEY_LAST_DATE, todayStr);
+
+        // Recalculate Retroactive Streak from History
+        const currentStreak = incrementStreak();
 
         // Submit to Google Sheets via Webhook URL
         try {
